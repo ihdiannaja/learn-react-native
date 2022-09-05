@@ -21,9 +21,9 @@ const MainPage = () => {
 
     useEffect(() => {
         if (route.params?.message) {
-            console.log(route.params?.message);
+            console.log(route.params.message);
         }
-    }, [route.params?.message])
+    }, [route.params])
 
     return (
         <MainContainer>

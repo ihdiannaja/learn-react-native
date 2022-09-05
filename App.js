@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomePage from './src/features/Home/Main/MainPage';
 import { LoginPage } from './src/features/Login/LoginPage';
 import ProductList from './src/features/Product/ProductList';
@@ -20,15 +21,17 @@ export default function App() {
   }
   return (
     <DepedencyProvider service={services}>
-      <ThemeProvider>
-        <NavigationContainer>
-          {/* <WelcomePage /> */}
-          {/* <LoginPage /> */}
-          {/* <ProductList /> */}
-          {/* <HomePage /> */}
-          <AppRouter />
-        </NavigationContainer>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <NavigationContainer>
+            {/* <WelcomePage /> */}
+            {/* <LoginPage /> */}
+            {/* <ProductList /> */}
+            {/* <HomePage /> */}
+            <AppRouter />
+          </NavigationContainer>
+        </ThemeProvider>
+      </SafeAreaProvider>
     </DepedencyProvider>
   );
 }
