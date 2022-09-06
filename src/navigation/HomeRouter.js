@@ -21,8 +21,9 @@ const HomeRouter = () => {
                     default:
                         return null
                 }
-            }
-            ,tabBarActiveTintColor : theme.color.primary
+            },
+            tabBarActiveTintColor : theme.color.primary,
+            tabBarInactiveTintColor : theme.color.foreground
         })
         }>
             <Tab.Screen name={ROUTE.MAIN} component={MainPage} options={{headerShown : false}}/>

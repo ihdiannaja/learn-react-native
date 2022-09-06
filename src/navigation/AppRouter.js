@@ -8,17 +8,41 @@ import { WelcomePage } from "../features/Welcome/WelcomePage";
 import { ROUTE } from "../shared/constants";
 import { useTheme } from "../shared/context/ThemeContext";
 import {FontAwesome} from '@expo/vector-icons'
+import { theme } from "../shared/Theme";
+import { UseAuth } from "../shared/hook/UseAuth";
+import { useEffect, useState } from "react";
+import { View } from "react-native";
 
 const Stack = CreateStackNavigator();
 
 const AppRouter = () => {
-    const theme = useTheme()
-    return (
-        <Stack.Navigator initialRouteName={ROUTE.WELCOME}>
+    const {isTokenExist} = UseAuth()
+    const [initialRoute, setInitialRoute] = useState(null)
+
+    useEffect(() => {
+        const onValidToken = async () => {
+            try {
+                const resp = await isTokenExist()
+                console.log('token', resp);
+                if (resp) {
+                    setInitialRoute(ROUTE.HOME)
+                } else {
+                    setInitialRoute(ROUTE.WELCOME)
+                }
+            } catch (e) {
+                setInitialRoute(ROUTE.WELCOME)
+            }
+        }
+        onValidToken()
+    }, [])
+
+    return initialRoute !== null ? (
+        <Stack.Navigator initialRouteName={initialRoute}>
             <Stack.Group screenOptions={{headerShown : false}}>
                 <Stack.Screen name={ROUTE.WELCOME} component={WelcomePage}/>
                 <Stack.Screen name={ROUTE.LOGIN} component={LoginPage}/>
                 <Stack.Screen name={ROUTE.HOME} component={HomePage}/>
+                {/* <Stack.Screen name={ROUTE.MAIN} component={MainPage}/> */}
             </Stack.Group>
             <Stack.Screen name={ROUTE.PIN} component={PinPage} options={{
                 headerTitle: '',
@@ -26,6 +50,9 @@ const AppRouter = () => {
             }}/>
         </Stack.Navigator>
     )
+    :   (
+            <View></View>
+        )
 }
 
 export default AppRouter

@@ -11,6 +11,7 @@ import { useNavigation, useRoute } from "@react-navigation/native"
 import { ROUTE } from "../../../shared/constants"
 import { useEffect, useState } from "react"
 import ModalDialog from "../../../shared/components/ModalDialog"
+import { UseAuth } from "../../../shared/hook/UseAuth"
 
 const MainPage = () => {
     const theme = useTheme();
@@ -18,12 +19,38 @@ const MainPage = () => {
     const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false)
     const route = useRoute()
+    const {onLogout, getUserName} = UseAuth()
+    const [name, setName] = useState()
 
     useEffect(() => {
         if (route.params?.message) {
             console.log(route.params.message);
         }
     }, [route.params])
+
+    useEffect(() => {
+        onGetName()
+    }, [])
+
+    const handleLogout = async () => {
+        try {
+            const resp = await onLogout();
+            if (resp) {
+                navigation.replace(ROUTE.LOGIN)
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const onGetName = async () => {
+        try {
+            const resp = await getUserName()
+            setName(resp)
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     return (
         <MainContainer>
@@ -49,6 +76,7 @@ const MainPage = () => {
                             <View style={styles.menuContainer}>
                                 <TouchableOpacity style={styles.touchable} onPress={() => {
                                     navigation.navigate(ROUTE.PIN, {
+                                        userId : 123,
                                         prevPage: ROUTE.HOME,
                                     })
                                 }}>
@@ -68,8 +96,11 @@ const MainPage = () => {
                         <View >
                             <HeaderPageLabel text={'Profile'} />
                             <View style={{margin : theme.spacing.m}}>
-                                <TouchableOpacity onPress={() => navigation.replace(ROUTE.LOGIN)}>
-                                    <Text>Logout</Text>
+                                <TouchableOpacity 
+                                // onPress={() => navigation.replace(ROUTE.LOGIN)}
+                                onPress={() => handleLogout()}
+                                >
+                                    <Text>Logout {name}</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

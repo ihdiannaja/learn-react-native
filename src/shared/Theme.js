@@ -39,7 +39,7 @@ export const theme = {
         },
         subtitle2 : {
             fontSize : 20,
-            color : pallete.lightGrey,
+            color : pallete.black,
             fontFamily : 'Poppins-Regular'
         },
         normalText : {
